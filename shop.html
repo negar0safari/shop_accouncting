@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فروشگاه تخصصی نرم‌افزارهای مالی و حسابداری</title>
+  
+  <!-- فونت وزیرمتن و آیکون‌ها -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Vazirmatn', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              dark: '#0f172a'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- استایل‌های سفارشی CSS -->
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* استایل اختصاصی اسلایدر */
+    .hero-slider {
+      position: relative;
+      width: 100%;
+      min-height: 85vh;
+      overflow: hidden;
+      background-color: #0b1329;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s;
+      z-index: 1;
+    }
+    .hero-slide.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 2;
+    }
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.35);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .indicator-dot {
+      transition: all 0.3s ease;
+    }
+    .indicator-dot.active {
+      width: 2rem;
+      background-color: #10b981;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- نوبار ریسپانسیو و ناوبری -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
+    <div class="container mx-auto px-4 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- لوگو و برند -->
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <i class="fas fa-chart-pie text-white text-lg"></i>
+          </div>
+          <div class="leading-tight">
+            <span class="text-xl font-black tracking-tight text-white">سپیدیار</span>
+            <span class="text-xs block text-emerald-400 font-medium">راهکارهای یکپارچه ابری و مالی</span>
+          </div>
+        </a>
+
+        <!-- دکمه سبد خرید در موبایل -->
+        <a href="#cart" class="md:hidden relative p-2.5 rounded-lg bg-slate-800 text-slate-200">
+          <i class="fas fa-shopping-basket"></i>
+          <span class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 text-xs text-white rounded-full flex items-center justify-center font-bold">۰</span>
+        </a>
+      </div>
+
+      <!-- نوار جستجو -->
+      <div class="relative w-full md:w-80 lg:w-96">
+        <input 
+          type="search" 
+          placeholder="جستجو در نرم‌افزارها، دوره‌ها..." 
+          class="w-full py-2.5 pr-11 pl-4 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+        >
+        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+
+      <!-- منو و دکمه سبد خرید در دسکتاپ -->
+      <nav class="flex items-center gap-2 lg:gap-4 w-full md:w-auto justify-center overflow-x-auto pb-1 md:pb-0">
+        <a href="#home" class="px-3.5 py-2 text-sm rounded-lg font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition">خانه</a>
+        <a href="#products" class="px-3.5 py-2 text-sm rounded-lg font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition">محصولات</a>
+        <a href="#services" class="px-3.5 py-2 text-sm rounded-lg font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition">خدمات</a>
+        <a href="#support" class="px-3.5 py-2 text-sm rounded-lg font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition">پشتیبانی</a>
+        
+        <a href="#cart" class="hidden md:flex items-center gap-2 px-4 py-2 text-sm rounded-lg font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-900/30 transition">
+          <i class="fas fa-shopping-cart text-xs"></i>
+          <span>سبد خرید</span>
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- اسلایدر اصلی (Hero Section) -->
+  <section class="hero-slider relative flex items-center" id="home">
+    
+    <!-- اسلاید ۱ -->
+    <div class="hero-slide active">
+      <img src="a1.jpg" alt="سیستم یکپارچه مالی" class="slide-bg">
+      <div class="relative z-10 w-full h-full flex items-center min-h-[85vh]">
+        <div class="container mx-auto px-6 lg:px-12 py-16">
+          <div class="max-w-2xl text-white space-y-6">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              <i class="fas fa-check"></i> نسخه ویژه شرکتی و سازمانی
+            </span>
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
+              نرم‌افزار حسابداری پیشرفته و یکپارچه
+            </h1>
+            <p class="text-base sm:text-lg text-slate-200 leading-relaxed drop-shadow">
+              راهکار جامع مالی با قابلیت اتصال به سپیدار، صدور فاکتور الکترونیک، سامانه‌های مودیان و ماژول‌های تحلیل سودآوری دقیق.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a href="#products" class="px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold transition shadow-lg shadow-emerald-500/30 flex items-center gap-2">
+                <span>مشاهده نرم‌افزارها</span>
+                <i class="fas fa-arrow-left text-xs"></i>
+              </a>
+              <a href="#contact" class="px-6 py-3.5 rounded-xl glass-card text-white hover:bg-white/20 font-semibold transition">
+                دریافت مشاوره رایگان
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- اسلاید ۲ -->
+    <div class="hero-slide">
+      <img src="a2.jpg" alt="دوره‌های تخصصی حسابداری" class="slide-bg">
+      <div class="relative z-10 w-full h-full flex items-center min-h-[85vh]">
+        <div class="container mx-auto px-6 lg:px-12 py-16">
+          <div class="max-w-2xl text-white space-y-6">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+              <i class="fas fa-graduation-cap"></i> آکادمی تخصصی
+            </span>
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
+              دوره‌های آموزشی صفر تا صد بازار کار
+            </h2>
+            <p class="text-base sm:text-lg text-slate-200 leading-relaxed drop-shadow">
+              آموزش عملی کار با سیستم‌های سپیدار، محک و هلو همراه با ارائه مدارک معتبر و معرفی به پروژه‌های صنعتی.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a href="#courses" class="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-lg shadow-blue-600/30">
+                بررسی سرفصل‌ها
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- اسلاید ۳ -->
+    <div class="hero-slide">
+      <img src="a3.jpg" alt="پشتیبانی ۲۴ ساعته" class="slide-bg">
+      <div class="relative z-10 w-full h-full flex items-center min-h-[85vh]">
+        <div class="container mx-auto px-6 lg:px-12 py-16">
+          <div class="max-w-2xl text-white space-y-6">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <i class="fas fa-headset"></i> پشتیبانی بی‌وقفه
+            </span>
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-md">
+              پشتیبانی و نگهداری تخصصی زیرساخت
+            </h2>
+            <p class="text-base sm:text-lg text-slate-200 leading-relaxed drop-shadow">
+              تیم فنی و کارشناسان حسابداری ما در تمامی روزهای هفته آماده عیب‌یابی و پشتیبانی لحظه‌ای سیستم‌های شما هستند.
+            </p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <a href="#contact" class="px-6 py-3.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold transition shadow-lg shadow-purple-600/30">
+                ارتباط با کارشناس
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- دکمه‌های ناوبری اسلایدر -->
+    <button id="sliderPrev" aria-label="قبلی" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full glass-card text-white hover:bg-white/30 flex items-center justify-center transition">
+      <i class="fas fa-chevron-right text-sm"></i>
+    </button>
+    <button id="sliderNext" aria-label="بعدی" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full glass-card text-white hover:bg-white/30 flex items-center justify-center transition">
+      <i class="fas fa-chevron-left text-sm"></i>
+    </button>
+
+    <!-- نقاط راهنما (Indicators) -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5">
+      <button class="indicator-dot w-3 h-3 rounded-full bg-white/40 active" data-index="0" aria-label="اسلاید ۱"></button>
+      <button class="indicator-dot w-3 h-3 rounded-full bg-white/40" data-index="1" aria-label="اسلاید ۲"></button>
+      <button class="indicator-dot w-3 h-3 rounded-full bg-white/40" data-index="2" aria-label="اسلاید ۳"></button>
+    </div>
+
+  </section>
+
+  <!-- بخش خدمات -->
+  <section class="py-20 bg-white" id="services">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">خدمات تخصصی سازمانی</h2>
+        <div class="w-16 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+        <p class="text-slate-600 mt-4 text-base md:text-lg">پشتیبانی و توسعه زیرساخت‌های مالی همراه با تیمی باسابقه و متعهد</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- کارت ۱ -->
+        <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-300 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-laptop-code"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">تأمین و سفارشی‌سازی نرم‌افزار</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+              ارائه و پیاده‌سازی نرم‌افزارهای تخصصی و فنی متناسب با صنایع تولیدی، بازرگانی و خدماتی با قابلیت هماهنگ‌سازی و گزارش‌گیری اختصاصی.
+            </p>
+            <ul class="space-y-2.5 text-sm text-slate-700 mb-6">
+              <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-xs"></i> نرم‌افزارهای یکپارچه و سفارشی</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-xs"></i> استقرار و پیکربندی سریع دیتابیس</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500 text-xs"></i> اتصال به درگاه‌ها و سامانه‌های دولتی</li>
+            </ul>
+          </div>
+          <button class="w-full py-3 rounded-xl bg-slate-200/80 group-hover:bg-emerald-600 group-hover:text-white text-slate-700 font-semibold text-sm transition-colors duration-300">
+            درخواست مشاوره
+          </button>
+        </div>
+
+        <!-- کارت ۲ -->
+        <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">مشاوره تخصصی و مالیاتی</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+              ارزیابی فرآیندهای مالی کسب‌وکارها، برطرف‌سازی خطاهای ثبتی، بهینه‌سازی جریان نقدینگی و هدایت پروژه‌ها بر اساس استانداردهای روز.
+            </p>
+            <ul class="space-y-2.5 text-sm text-slate-700 mb-6">
+              <li class="flex items-center gap-2"><i class="fas fa-check text-blue-500 text-xs"></i> ممیزی و تحلیل ساختار دفاتر مالی</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-blue-500 text-xs"></i> بهینه‌سازی سیستم حقوق و دستمزد</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-blue-500 text-xs"></i> انطباق با قوانین سامانه مودیان</li>
+            </ul>
+          </div>
+          <button class="w-full py-3 rounded-xl bg-slate-200/80 group-hover:bg-blue-600 group-hover:text-white text-slate-700 font-semibold text-sm transition-colors duration-300">
+            رزرو وقت جلسه
+          </button>
+        </div>
+
+        <!-- کارت ۳ -->
+        <div class="group p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-purple-300 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-3">پشتیبانی فنی و نگهداری دائم</h3>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+              تأمین لایسنس‌های اصلی، بازیابی اطلاعات، تهیه نسخه‌های پشتیبان خودکار و پاسخگویی تلفنی و آنلاین در هر ساعت از شبانه‌روز.
+            </p>
+            <ul class="space-y-2.5 text-sm text-slate-700 mb-6">
+              <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> ارائه نسخه‌های معتبر و قانونی</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> مانیتورینگ سلامت پایگاه داده</li>
+              <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500 text-xs"></i> پشتیبانی فوری تیکتی و تلفنی</li>
+            </ul>
+          </div>
+          <button class="w-full py-3 rounded-xl bg-slate-200/80 group-hover:bg-purple-600 group-hover:text-white text-slate-700 font-semibold text-sm transition-colors duration-300">
+            ارتباط با پشتیبانی
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- بنر معرفی سیستم و دمو -->
+  <section class="py-16 bg-slate-900 text-white overflow-hidden relative" id="support">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div class="lg:w-1/2 space-y-6 text-center lg:text-right">
+          <span class="text-xs uppercase font-bold tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">
+            اتوماسیون مالی مدرن
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold leading-snug">
+            مدیریت هوشمند حساب‌ها، فراتر از ثبت اسناد سنتی
+          </h2>
+          <p class="text-slate-300 leading-relaxed text-justify">
+            سامانه جامع ما به شما امکان می‌دهد فرآیندهای انبارداری، خزانه‌داری، مشتریان و حقوق‌ودستمزد را در یک محیط کاربرپسند و دقیق مدیریت کنید.
+          </p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+            <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-emerald-400 font-bold block text-lg mb-0.5">۱۰۰٪</span>
+              <span class="text-xs text-slate-300">دقت محاسبات</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700">
+              <span class="text-blue-400 font-bold block text-lg mb-0.5">۲۴/۷</span>
+              <span class="text-xs text-slate-300">پشتیبانی آنلاین</span>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-800 border border-slate-700 col-span-2 sm:col-span-1">
+              <span class="text-purple-400 font-bold block text-lg mb-0.5">+۵,۰۰۰</span>
+              <span class="text-xs text-slate-300">کسب‌وکار فعال</span>
+            </div>
+          </div>
+          <div class="pt-4 flex flex-wrap gap-4 justify-center lg:justify-start">
+            <button class="px-8 py-3.5 bg-emerald-500 hover:bg-emerald-600 rounded-xl font-bold transition shadow-lg shadow-emerald-500/30">
+              دریافت نسخه آزمایشی (رایگان)
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:w-1/2 flex justify-center">
+          <div class="relative w-full max-w-md">
+            <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-3xl blur-xl opacity-30"></div>
+            <img src="m1.jpg" alt="داشبورد مالی" class="relative rounded-2xl shadow-2xl w-full border border-slate-700 object-cover aspect-video">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- بخش محصولات نرم‌افزاری -->
+  <section class="py-20 bg-slate-50" id="products">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+      
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">نرم‌افزارهای برگزیده مالی</h2>
+        <div class="w-16 h-1 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+        <p class="text-slate-600 mt-4 text-base md:text-lg">انتخاب هوشمندانه برای شرکت‌ها، کارخانه‌ها و اصناف بازرگانی</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <!-- کارت محک -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-slate-200">
+              <img src="m2.jpg" alt="نرم‌افزار محک" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+              <span class="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">دانش‌بنیان</span>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xl font-bold text-slate-800">نرم‌افزار حسابداری محک</h3>
+                <span class="text-emerald-600 text-sm font-semibold">سری عمومی و تجاری</span>
+              </div>
+              <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+                گزینه‌ای مناسب برای اصناف و شرکت‌های متوسط جهت مکانیزاسیون سریع محاسبات سود و زیان و انبارداری.
+              </p>
+              <ul class="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-4 mb-6">
+                <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> خروجی استاندارد مالیاتی</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> مدیریت اقساط و چک‌ها</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition">
+              بررسی و سفارش محصول
+            </button>
+          </div>
+        </div>
+
+        <!-- کارت هلو -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-slate-200">
+              <img src="m3.jpg" alt="نرم‌افزار هلو" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+              <span class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">پرفروش</span>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xl font-bold text-slate-800">نرم‌افزار حسابداری هلو APEX</h3>
+                <span class="text-blue-600 text-sm font-semibold">پوشش ۲۰۰+ صنف</span>
+              </div>
+              <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+                جامع‌ترین پلتفرم برای مدیریت فروشگاهی، خرده‌فروشی و زنجیره‌ای همراه با امکان اتصال به بارکدخوان و پوز بانکی.
+              </p>
+              <ul class="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-4 mb-6">
+                <li class="flex items-center gap-2"><i class="fas fa-check text-blue-500"></i> قابلیت اتصال به ترازو و کارتخوان</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-blue-500"></i> گزارش‌های جامع سود و فاکتور</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition">
+              بررسی و سفارش محصول
+            </button>
+          </div>
+        </div>
+
+        <!-- کارت سپیدار -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-slate-200">
+              <img src="m4.jpg" alt="نرم‌افزار سپیدار" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+              <span class="absolute top-4 right-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow">سازمانی</span>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-xl font-bold text-slate-800">نرم‌افزار شرکتی سپیدار</h3>
+                <span class="text-purple-600 text-sm font-semibold">۵ بسته یکپارچه</span>
+              </div>
+              <p class="text-slate-600 text-sm leading-relaxed mb-6 text-justify">
+                طراحی شده برای شرکت‌های بازرگانی، تولیدی، خدماتی، پیمانکاری و پخش جهت کنترل بهای تمام شده و دارایی‌ها.
+              </p>
+              <ul class="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-4 mb-6">
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> محاسبه دقیق بهای تمام شده</li>
+                <li class="flex items-center gap-2"><i class="fas fa-check text-purple-500"></i> اتصال مستقیم به سامانه مودیان</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-sm transition">
+              بررسی و سفارش محصول
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- بنر ارتباطی و تماس سریع -->
+  <section class="py-12 bg-slate-900 border-t border-slate-800" id="contact">
+    <div class="container mx-auto px-4 lg:px-8 max-w-5xl">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-slate-800/60 border border-slate-700">
+        <div>
+          <h3 class="text-2xl font-bold text-white mb-2">نیاز به راهنمایی در انتخاب سیستم دارید؟</h3>
+          <p class="text-slate-400 text-sm">مشاوران مالی و نرم‌افزاری ما در کوتاه‌ترین زمان به شما پاسخ خواهند داد.</p>
+        </div>
+        <div class="flex flex-wrap gap-4 w-full md:w-auto">
+          <a href="tel:02112345678" class="flex items-center justify-center gap-2.5 px-6 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition shadow-md w-full sm:w-auto">
+            <i class="fas fa-phone-alt"></i>
+            <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- فوتر استاندارد و ریسپانسیو -->
+  <footer class="bg-slate-950 text-slate-300 pt-16 pb-12 border-t border-slate-800">
+    <div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <!-- ستون ۱ -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500 flex items-center justify-center text-white font-bold">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <span class="text-xl font-extrabold text-white">مرکز تخصصی مالی</span>
+          </div>
+          <p class="text-sm text-slate-400 leading-relaxed text-justify">
+            ارائه‌دهنده راهکارهای حسابداری، اتوماسیون اداری و نرم‌افزارهای یکپارچه شرکتی برای بهبود دقت و سرعت رشد کسب‌وکارها.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white flex items-center justify-center transition"><i class="fab fa-telegram-plane"></i></a>
+            <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white flex items-center justify-center transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white flex items-center justify-center transition"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <!-- ستون ۲ -->
+        <div>
+          <h4 class="text-white font-bold text-base mb-4 pb-2 border-b border-slate-800">دسترسی سریع</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="#home" class="hover:text-emerald-400 transition">صفحه اصلی</a></li>
+            <li><a href="#products" class="hover:text-emerald-400 transition">فهرست نرم‌افزارها</a></li>
+            <li><a href="#services" class="hover:text-emerald-400 transition">خدمات فنی و اجرایی</a></li>
+            <li><a href="#support" class="hover:text-emerald-400 transition">درخواست دمو آنلاین</a></li>
+          </ul>
+        </div>
+
+        <!-- ستون ۳ -->
+        <div>
+          <h4 class="text-white font-bold text-base mb-4 pb-2 border-b border-slate-800">اطلاعات تماس</h4>
+          <ul class="space-y-3 text-sm text-slate-400">
+            <li class="flex items-start gap-3">
+              <i class="fas fa-map-marker-alt text-emerald-400 mt-1"></i>
+              <span>تهران، خیابان ولیعصر، برج فناوری</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i class="fas fa-phone text-emerald-400"></i>
+              <span>۰۲۱-۱۲۳۴۵۶۷۸</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i class="fas fa-envelope text-emerald-400"></i>
+              <span>info@sepidar-shop.ir</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- ستون ۴: عضویت خبرنامه -->
+        <div>
+          <h4 class="text-white font-bold text-base mb-4 pb-2 border-b border-slate-800">خبرنامه مالی</h4>
+          <p class="text-sm text-slate-400 mb-4">از آخرین قوانین مالیاتی و آپدیت نرم‌افزارها باخبر شوید:</p>
+          <form class="space-y-2" onsubmit="event.preventDefault()">
+            <input 
+              type="email" 
+              placeholder="آدرس ایمیل شما" 
+              class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition">
+              عضویت
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- کپی رایت -->
+      <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>© تمامی حقوق محفوظ است.</p>
+        <div class="flex gap-4">
+          <a href="#" class="hover:text-slate-400 transition">حریم خصوصی</a>
+          <a href="#" class="hover:text-slate-400 transition">شرایط و قوانین</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- اسکریپت کنترل اسلایدر -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.indicator-dot');
+      const prevBtn = document.getElementById('sliderPrev');
+      const nextBtn = document.getElementById('sliderNext');
+      
+      let currentIndex = 0;
+      let slideInterval;
+
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        currentIndex = (index + slides.length) % slides.length;
+        
+        slides[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
+      }
+
+      function nextSlide() {
+        showSlide(currentIndex + 1);
+      }
+
+      function prevSlide() {
+        showSlide(currentIndex - 1);
+      }
+
+      function startAutoSlide() {
+        slideInterval = setInterval(nextSlide, 5000);
+      }
+
+      function resetAutoSlide() {
+        clearInterval(slideInterval);
+        startAutoSlide();
+      }
+
+      if (nextBtn && prevBtn) {
+        nextBtn.addEventListener('click', () => {
+          nextSlide();
+          resetAutoSlide();
+        });
+
+        prevBtn.addEventListener('click', () => {
+          prevSlide();
+          resetAutoSlide();
+        });
+      }
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
+          resetAutoSlide();
+        });
+      });
+
+      startAutoSlide();
+    });
+  </script>
+
+</body>
+</html>
